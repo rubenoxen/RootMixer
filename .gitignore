@@ -1,0 +1,8 @@
+*.elf
+*.hex
+*.bin
+*.o
+*.map
+*-backups/
+*.bck
+fp-info-cache
