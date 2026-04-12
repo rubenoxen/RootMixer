@@ -29,9 +29,33 @@
 #define USB_GRSTCTL     *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x010))
 #define USB_GINTSTS     *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x014))
 #define USB_GINTMSK     *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x018))
+#define USB_GRXFSIZ     *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x024))
+#define USB_DIEPTXF0    *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x028))
+#define USB_DIEPTXF1    *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x104))
+#define USB_DCFG        *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x800))
+#define USB_DCTL        *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x804))
+#define USB_DSTS        *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x808))
+#define USB_DIEPMSK     *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x810))
+#define USB_DOEPMSK     *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x814))
+#define USB_DAINT       *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x818))
+#define USB_DAINTMSK    *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x81C))
+#define USB_DIEPCTL0    *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x900))
+#define USB_DOEPCTL0    *((volatile uint32_t *)(USB_OTG_FS_BASE + 0xB00))
+#define USB_DOEPTSIZ0   *((volatile uint32_t *)(USB_OTG_FS_BASE + 0xB10))
+#define USB_GRXSTSP     *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x020))
+#define USB_DFIFO0      *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x1000))
+#define USB_DIEPINT0    *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x908))
+#define USB_DOEPINT0    *((volatile uint32_t *)(USB_OTG_FS_BASE + 0xB08))
 
+#define NVIC_ISER2      *((volatile uint32_t *)(0xE000E108))
+#define USB_DIEPTSIZ0   *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x910))
+
+void USB_Write_EP0(const uint8_t *data, uint32_t len);
 void SystemClock_Config(void);
 void USB_GPIO_Init(void);
 void USB_Core_Init(void);
+void USB_Device_Init(void);
+void USB_NVIC_Init(void);
+void OTG_FS_IRQHandler(void);
 
 #endif

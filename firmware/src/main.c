@@ -8,6 +8,8 @@ int main(void) {
 
     USB_GPIO_Init();
     USB_Core_Init();
+    USB_NVIC_Init();
+    USB_Device_Init();
 
     RCC_AHB1ENR |= (1 << 2);
 
