@@ -8,7 +8,6 @@ extern uint32_t _sbss;
 extern uint32_t _ebss;
 
 int main(void);
-
 void OTG_FS_IRQHandler(void);
 
 void Reset_Handler(void) {
@@ -41,6 +40,5 @@ uint32_t *isr_vectors[] = {
     (uint32_t *)Default_Handler,
 
     [4 ... 82] = (uint32_t *)Default_Handler,
-
     [83] = (uint32_t *)OTG_FS_IRQHandler
 };
