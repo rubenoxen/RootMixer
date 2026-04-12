@@ -1,9 +1,21 @@
 #include <stdint.h>
+#include "stm32f411.h"
 
-#define RCC_BASE 0x40023800
-#define RCC_AHB1ENR (*((volatile uint32_t *)(RCC_BASE + 0x30)))
+void SystemClock_Config(void);
 
 int main(void) {
+    SystemClock_Config();
+
+    USB_GPIO_Init();
+    USB_Core_Init();
+
+    RCC_AHB1ENR |= (1 << 2);
+
+    GPIOC_MODER &= ~(3 << 26);
+    GPIOC_MODER |= (1 << 26);
+
+    GPIOC_BSRR = (1 << 29);
+
     while (1);
 
     return 0;
