@@ -9,6 +9,7 @@ extern uint32_t _ebss;
 
 int main(void);
 void OTG_FS_IRQHandler(void);
+void SysTick_Handler(void);
 
 void Reset_Handler(void) {
     uint32_t *src = &_la_data;
@@ -38,7 +39,8 @@ uint32_t *isr_vectors[] = {
     (uint32_t *)Reset_Handler,
     (uint32_t *)Default_Handler,
     (uint32_t *)Default_Handler,
-
-    [4 ... 82] = (uint32_t *)Default_Handler,
+    [4 ... 14] = (uint32_t *)Default_Handler,
+    [15] = (uint32_t *)SysTick_Handler,
+    [16 ... 82] = (uint32_t *)Default_Handler,
     [83] = (uint32_t *)OTG_FS_IRQHandler
 };

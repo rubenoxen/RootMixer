@@ -9,19 +9,20 @@ FLOAT-ABI = -mfloat-abi=hard
 MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 
 # Paths and Files
-SRC_DIR = src
 INC_DIR = inc
 STARTUP_DIR = startup
 LINKER_DIR = linker
 BUILD_DIR = build
+DRIVERS_DIR = drivers
+APP_DIR = app
 
 TARGET = $(BUILD_DIR)/mixer_firmware
 
-SOURCES = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(STARTUP_DIR)/*.c)
+SOURCES = $(wildcard $(APP_DIR)/*.c) $(wildcard $(DRIVERS_DIR)/*.c) $(wildcard $(STARTUP_DIR)/*.c)
 OBJECTS = $(addprefix $(BUILD_DIR)/, $(notdir $(SOURCES:.c=.o)))
 
 # VPATH tells make where to look for source files
-VPATH = $(SRC_DIR):$(STARTUP_DIR)
+VPATH = $(APP_DIR):$(DRIVERS_DIR):$(STARTUP_DIR)
 
 # Compiler Flags
 CFLAGS = $(MCU) -Wall -Wextra -g -O0 -I$(INC_DIR) -std=c11

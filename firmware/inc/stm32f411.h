@@ -7,9 +7,11 @@
 #define FLASH_BASE_REG  0x40023C00
 #define RCC_BASE        0x40023800
 #define GPIOA_BASE      0x40020000
+#define GPIOB_BASE      0x40020400
 #define GPIOC_BASE      0x40020800
 #define USB_OTG_FS_BASE 0x50000000
 #define ADC1_BASE       0x40012000
+#define TIM1_BASE       0x40010000
 #define NVIC_ISER2      *((volatile uint32_t *)(0xE000E108))
 
 /* --- RCC & FLASH --- */
@@ -19,6 +21,7 @@
 #define RCC_CFGR        *((volatile uint32_t *)(RCC_BASE + 0x08))
 #define RCC_AHB1ENR     *((volatile uint32_t *)(RCC_BASE + 0x30))
 #define RCC_AHB2ENR     *((volatile uint32_t *)(RCC_BASE + 0x34))
+#define RCC_APB1ENR     *((volatile uint32_t *)(RCC_BASE + 0x40))
 #define RCC_APB2ENR     *((volatile uint32_t *)(RCC_BASE + 0x44))
 
 /* --- GPIO --- */
@@ -26,6 +29,9 @@
 #define GPIOA_ODR       *((volatile uint32_t *)(GPIOA_BASE + 0x14))
 #define GPIOA_OSPEEDR   *((volatile uint32_t *)(GPIOA_BASE + 0x08))
 #define GPIOA_AFRH      *((volatile uint32_t *)(GPIOA_BASE + 0x24))
+#define GPIOB_MODER     *((volatile uint32_t *)(GPIOB_BASE + 0x00))
+#define GPIOB_IDR       *((volatile uint32_t *)(GPIOB_BASE + 0x10))
+#define GPIOB_PUPDR     *((volatile uint32_t *)(GPIOB_BASE + 0x0C))
 #define GPIOC_MODER     *((volatile uint32_t *)(GPIOC_BASE + 0x00))
 #define GPIOC_BSRR      *((volatile uint32_t *)(GPIOC_BASE + 0x18))
 
@@ -68,6 +74,25 @@
 #define ADC_SQR3        *((volatile uint32_t *)(ADC1_BASE + 0x34))
 #define ADC_DR          *((volatile uint32_t *)(ADC1_BASE + 0x4C))
 
+/* --- TIMERS (Encoders) --- */
+#define TIM1_CR1        *((volatile uint32_t *)(TIM1_BASE + 0x00))
+#define TIM1_SMCR       *((volatile uint32_t *)(TIM1_BASE + 0x08))
+#define TIM1_CCMR1      *((volatile uint32_t *)(TIM1_BASE + 0x18))
+#define TIM1_CCER       *((volatile uint32_t *)(TIM1_BASE + 0x20))
+#define TIM1_CNT        *((volatile uint32_t *)(TIM1_BASE + 0x24))
+#define TIM1_ARR        *((volatile uint32_t *)(TIM1_BASE + 0x2C))
+
+/* --- I2C1 REGISTERS --- */
+#define I2C1_BASE       0x40005400
+#define I2C_CR1         *((volatile uint32_t *)(I2C1_BASE + 0x00))
+#define I2C_CR2         *((volatile uint32_t *)(I2C1_BASE + 0x04))
+#define I2C_OAR1        *((volatile uint32_t *)(I2C1_BASE + 0x08))
+#define I2C_DR          *((volatile uint32_t *)(I2C1_BASE + 0x10))
+#define I2C_SR1         *((volatile uint32_t *)(I2C1_BASE + 0x14))
+#define I2C_SR2         *((volatile uint32_t *)(I2C1_BASE + 0x18))
+#define I2C_CCR         *((volatile uint32_t *)(I2C1_BASE + 0x1C))
+#define I2C_TRISE       *((volatile uint32_t *)(I2C1_BASE + 0x20))
+
 /* --- PROTOTYPES --- */
 void SystemClock_Config(void);
 void USB_GPIO_Init(void);
@@ -80,5 +105,9 @@ void OTG_FS_IRQHandler(void);
 void ADC_Init(void);
 uint16_t ADC_Read(uint8_t channel);
 void MUX_Select(uint8_t channel);
+void Buttons_Init(void);
+uint8_t Buttons_Read(void);
+void Encoder_Init(void);
+int16_t Encoder_Read(void);
 
 #endif
