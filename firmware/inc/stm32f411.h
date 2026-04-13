@@ -26,6 +26,7 @@
 
 /* --- GPIO --- */
 #define GPIOA_MODER     *((volatile uint32_t *)(GPIOA_BASE + 0x00))
+#define GPIOA_IDR       *((volatile uint32_t *)(GPIOA_BASE + 0x10))
 #define GPIOA_ODR       *((volatile uint32_t *)(GPIOA_BASE + 0x14))
 #define GPIOA_OSPEEDR   *((volatile uint32_t *)(GPIOA_BASE + 0x08))
 #define GPIOA_AFRH      *((volatile uint32_t *)(GPIOA_BASE + 0x24))
