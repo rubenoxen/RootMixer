@@ -1,6 +1,7 @@
 # Toolchain
 CC = arm-none-eabi-gcc
 OBJCOPY = arm-none-eabi-objcopy
+SIZE = arm-none-eabi-size
 
 # Target MCU configuration
 CPU = -mcpu=cortex-m4
@@ -29,7 +30,7 @@ CFLAGS = $(MCU) -Wall -Wextra -g -O0 -I$(INC_DIR) -std=c11
 LDFLAGS = -T $(LINKER_DIR)/stm32f411.ld -nostdlib -Wl,-Map=$(TARGET).map
 
 # Build Rules
-all: $(BUILD_DIR) $(TARGET).elf $(TARGET).bin
+all: $(BUILD_DIR) $(TARGET).elf $(TARGET).bin size
 
 # Create build directory
 $(BUILD_DIR):
@@ -47,6 +48,10 @@ $(TARGET).elf: $(OBJECTS)
 $(TARGET).bin: $(TARGET).elf
 	$(OBJCOPY) -O binary $< $@
 
+size: $(TARGET).elf
+	@echo "--- Memory Usage ---"
+	@$(SIZE) -A -x $<
+
 # Clean workspace
 clean:
 	rm -rf $(BUILD_DIR)
@@ -55,4 +60,4 @@ clean:
 flash: $(TARGET).elf
 	openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c "program $< verify reset exit"
 
-.PHONY: all clean flash
+.PHONY: all clean flash size

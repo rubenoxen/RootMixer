@@ -4,13 +4,23 @@
 #include "i2c.h"
 #include "ssd1306.h"
 #include "buttons.h"
-#include "encoder.h" // <-- Añadimos el driver de la ruletilla
+#include "encoder.h"
 
-// Variables de Estado de la App
-uint8_t fader_state[4] = {0};
-uint8_t button_state = 0;
-uint8_t pan_state = 64; // <-- Inicializamos el paneo al centro (64 de 127)
-uint8_t ui_dirty = 1;
+/* --- ESTRUCTURA DE DATOS DEL SISTEMA --- */
+typedef struct {
+    uint8_t faders[4];
+    uint8_t mutes;      // Máscara de bits para los botones
+    uint8_t pan;        // 0 a 127
+    uint8_t is_dirty;   // Flag para refrescar la pantalla
+} MixerState_t;
+
+// Instancia global única del estado de la mesa
+MixerState_t mixer = {
+    .faders = {0, 0, 0, 0},
+    .mutes = 0,
+    .pan = 64,          // Centro
+    .is_dirty = 1       // Forzar primer dibujado
+};
 
 void Mixer_App_Init(void) {
     SystemClock_Config();
@@ -21,27 +31,27 @@ void Mixer_App_Init(void) {
     USB_Device_Init();
     ADC_Init();
     Buttons_Init();
-    Encoder_Init(); // <-- Arrancamos el hardware del Encoder
+    Encoder_Init();
     I2C_Init();
     SSD1306_Init();
 }
 
-void Draw_Master_UI(void) {
+/* El motor gráfico ahora recibe el estado por referencia (puntero),
+   esto lo hace modular y reutilizable */
+void Draw_Master_UI(MixerState_t *state) {
     SSD1306_Clear();
 
-    // 1. Faders y Botones de Mute
     for (uint8_t i = 0; i < 4; i++) {
-        uint8_t bar_h = (fader_state[i] * 50) / 127;
+        uint8_t bar_h = (state->faders[i] * 50) / 127;
         uint8_t x_pos = (i * 30) + 5;
         SSD1306_DrawFilledRect(x_pos, 50 - bar_h, 20, bar_h, 1);
 
-        if (button_state & (1 << i)) {
+        if (state->mutes & (1 << i)) {
             SSD1306_DrawFilledRect(x_pos + 5, 54, 10, 10, 1);
         }
     }
 
-    // 2. Ruletilla de Paneo (Barra horizontal en la parte superior)
-    uint8_t pan_x = (pan_state * 128) / 127; // Mapear 0-127 a 0-128 píxeles
+    uint8_t pan_x = (state->pan * 128) / 127;
     SSD1306_DrawFilledRect(0, 0, pan_x, 4, 1);
 
     SSD1306_UpdateScreen();
@@ -50,10 +60,11 @@ void Draw_Master_UI(void) {
 int main(void) {
     Mixer_App_Init();
 
-    uint8_t cc_faders[4] = {7, 8, 9, 10};
-    uint8_t cc_buttons[4] = {20, 21, 22, 23};
-    uint8_t cc_pan = 11; // CC estándar MIDI para Paneo (Pan)
+    const uint8_t cc_faders[4] = {7, 8, 9, 10};
+    const uint8_t cc_buttons[4] = {20, 21, 22, 23};
+    const uint8_t cc_pan = 11;
 
+    // Caché de hardware para detectar cambios
     uint8_t last_faders[4] = {255, 255, 255, 255};
     uint8_t last_buttons = 255;
     int16_t last_encoder = Encoder_Read();
@@ -64,22 +75,22 @@ int main(void) {
     while (1) {
         uint32_t current_time = Get_Millis();
 
-        // TAREA 1: Escanear Hardware (1000 Hz)
+        // --- TAREA 1: Escáner de Hardware (1000 Hz) ---
         if (current_time - last_scan_time >= 1) {
             last_scan_time = current_time;
 
-            // --- Escáner ADC (Faders) ---
+            // 1. Faders
             for (uint8_t i = 0; i < 4; i++) {
                 uint8_t val = (ADC_Read(i) >> 5);
                 if (val != last_faders[i]) {
                     USB_Send_MIDI_CC(cc_faders[i], val);
-                    fader_state[i] = val;
+                    mixer.faders[i] = val;
                     last_faders[i] = val;
-                    ui_dirty = 1;
+                    mixer.is_dirty = 1;
                 }
             }
 
-            // --- Escáner Digital (Botones) ---
+            // 2. Botones Mute
             uint8_t current_btn = Buttons_Read();
             if (current_btn != last_buttons) {
                 for (uint8_t i = 0; i < 4; i++) {
@@ -92,38 +103,35 @@ int main(void) {
                         USB_Send_MIDI_CC(cc_buttons[i], 0);
                     }
                 }
-                button_state = current_btn;
+                mixer.mutes = current_btn;
                 last_buttons = current_btn;
-                ui_dirty = 1;
+                mixer.is_dirty = 1;
             }
 
-            // --- Escáner del Encoder (Ruletilla) ---
+            // 3. Encoder (Paneo)
             int16_t current_enc = Encoder_Read();
             if (current_enc != last_encoder) {
-                int16_t delta = (current_enc - last_encoder) / 4; // Ajuste mecánico de clics
-
+                int16_t delta = (current_enc - last_encoder) / 4;
                 if (delta != 0) {
-                    int16_t new_pan = pan_state + delta;
-
-                    // Limitar límites físicos (0 a 127)
+                    int16_t new_pan = mixer.pan + delta;
                     if (new_pan > 127) new_pan = 127;
                     if (new_pan < 0) new_pan = 0;
 
-                    if (new_pan != pan_state) {
-                        pan_state = new_pan;
-                        USB_Send_MIDI_CC(cc_pan, pan_state);
-                        ui_dirty = 1;
+                    if (new_pan != mixer.pan) {
+                        mixer.pan = new_pan;
+                        USB_Send_MIDI_CC(cc_pan, mixer.pan);
+                        mixer.is_dirty = 1;
                     }
                     last_encoder = current_enc;
                 }
             }
         }
 
-        // TAREA 2: Refresco de Pantalla (30 FPS)
-        if ((current_time - last_ui_time >= 33) && ui_dirty) {
+        // --- TAREA 2: Refresco de Pantalla (30 FPS) ---
+        if ((current_time - last_ui_time >= 33) && mixer.is_dirty) {
             last_ui_time = current_time;
-            Draw_Master_UI();
-            ui_dirty = 0;
+            Draw_Master_UI(&mixer); // Pasamos el estado
+            mixer.is_dirty = 0;
         }
     }
 }
