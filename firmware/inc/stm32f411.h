@@ -110,5 +110,9 @@ void Buttons_Init(void);
 uint8_t Buttons_Read(void);
 void Encoder_Init(void);
 int16_t Encoder_Read(void);
+void I2C_Init(void);
+void SSD1306_Init(void);
+void SSD1306_Clear(void);
+void SSD1306_UpdateScreen(void);
 
 #endif

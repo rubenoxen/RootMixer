@@ -9,12 +9,6 @@ void ADC_Init(void) {
     ADC_CR2 |= 1; // ADON
 }
 
-void MUX_Select(uint8_t channel) {
-    uint32_t odr = GPIOA_ODR;
-    odr = (odr & ~(0xF << 4)) | ((channel & 0xF) << 4);
-    GPIOA_ODR = odr;
-}
-
 uint16_t ADC_Read(uint8_t channel) {
     ADC_SQR3 = channel;
     ADC_CR2 |= (1 << 30);
