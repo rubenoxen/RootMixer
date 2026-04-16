@@ -1,6 +1,17 @@
+<p align="center">
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License">
+  <img src="https://img.shields.io/badge/Hardware-KiCad_7-blueviolet.svg" alt="KiCad">
+  <img src="https://img.shields.io/badge/Firmware-Bare_Metal_C-orange.svg" alt="C">
+  <img src="https://img.shields.io/badge/MCU-STM32F411-green.svg" alt="STM32">
+</p>
+
 # RootMixer 
 
 A modular, bare-metal USB MIDI controller designed from scratch. Built around the STM32F411 (ARM Cortex-M4) using pure C CMSIS registers, featuring an expandable I2C and Analog Multiplexing architecture.
+
+<p align="center">
+  <img src="docs/render_motherboard.png" alt="RootMixer 3D Render" width="600">
+</p>
 
 ##  Features
 * **Bare-Metal Firmware:** Zero heavy libraries (No HAL, No Arduino). Direct register manipulation for ultra-low latency (<2ms scan rate).
@@ -15,7 +26,7 @@ A modular, bare-metal USB MIDI controller designed from scratch. Built around th
     * `/Motherboard`: Main STM32 brain, LDO power supply, and Expansion ports.
     * `/Daughterboard_Channel`: The swappable channel strip (1x SC6021N Fader, 4x WH148 Pots, Mute Button).
 
-##  Build & Flash (Firmware)
+## 🛠️ Build & Flash (Firmware)
 Requires `arm-none-eabi-gcc`, `make`, and `openocd`.
 
 ```bash
@@ -25,5 +36,6 @@ make
 make flash
 ```
 
-## License
+##📜 License
 This project is licensed under the MIT License - see the LICENSE file for details.
+
