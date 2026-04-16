@@ -10,7 +10,7 @@
 A modular, bare-metal USB MIDI controller designed from scratch. Built around the STM32F411 (ARM Cortex-M4) using pure C CMSIS registers, featuring an expandable I2C and Analog Multiplexing architecture.
 
 <p align="center">
-  <img src="docs/render_motherboard.png" alt="RootMixer 3D Render" width="600">
+  <img src="docs/Motherboard.png" alt="RootMixer 3D Render" width="600">
 </p>
 
 ##  Features
