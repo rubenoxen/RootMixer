@@ -7,7 +7,7 @@
 #include "adc.h"
 #include "mux.h"
 #include "usb.h"
-#include "rcc.h"   
+#include "rcc.h"
 
 // Estructura global del Mixer
 typedef struct {

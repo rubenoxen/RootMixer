@@ -1,8 +1,5 @@
+#include "stm32f411.h"
 #include "systick.h"
-
-#define SYST_CSR   *((volatile uint32_t *)0xE000E010)
-#define SYST_RVR   *((volatile uint32_t *)0xE000E014)
-#define SYST_CVR   *((volatile uint32_t *)0xE000E018)
 
 volatile uint32_t system_millis = 0;
 

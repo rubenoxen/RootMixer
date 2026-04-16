@@ -6,8 +6,10 @@ void I2C_Init(void) {
     RCC_APB1ENR |= (1 << 21);
 
     GPIOB_MODER |= (2 << 12) | (2 << 14);
-    *((volatile uint32_t *)(GPIOB_BASE + 0x04)) |= (1 << 6) | (1 << 7);
-    *((volatile uint32_t *)(GPIOB_BASE + 0x20)) |= (4 << 24) | (4 << 28);
+
+    GPIOB_OTYPER |= (1 << 6) | (1 << 7);
+
+    GPIOB_AFRL |= (4 << 24) | (4 << 28);
 
     I2C_CR1 |= (1 << 15);
     I2C_CR1 &= ~(1 << 15);
@@ -15,6 +17,7 @@ void I2C_Init(void) {
     I2C_CR2 |= 42;
     I2C_CCR = 210;
     I2C_TRISE = 43;
+
     I2C_CR1 |= (1 << 0);
 }
 
@@ -32,7 +35,7 @@ void I2C_Address(uint8_t address) {
 void I2C_Write(uint8_t data) {
     while (!(I2C_SR1 & (1 << 7)));
     I2C_DR = data;
-    while (!(I2C_SR1 & (1 << 2))); 
+    while (!(I2C_SR1 & (1 << 2)));
 }
 
 void I2C_Stop(void) {
