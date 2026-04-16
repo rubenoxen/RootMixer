@@ -26,7 +26,7 @@ A modular, bare-metal USB MIDI controller designed from scratch. Built around th
     * `/Motherboard`: Main STM32 brain, LDO power supply, and Expansion ports.
     * `/Daughterboard_Channel`: The swappable channel strip (1x SC6021N Fader, 4x WH148 Pots, Mute Button).
 
-## 🛠️ Build & Flash (Firmware)
+##  Build & Flash (Firmware)
 Requires `arm-none-eabi-gcc`, `make`, and `openocd`.
 
 ```bash
@@ -36,6 +36,6 @@ make
 make flash
 ```
 
-##📜 License
+## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
