@@ -4,6 +4,10 @@
 #include "encoder.h"
 #include "buttons.h"
 #include "i2c.h"
+#include "adc.h"
+#include "mux.h"
+#include "usb.h"
+#include "rcc.h"   
 
 // Estructura global del Mixer
 typedef struct {

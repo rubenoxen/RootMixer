@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "stm32f411.h"
+#include "adc.h"
 
 void ADC_Init(void) {
     RCC_AHB1ENR |= 1; // Clock GPIOA

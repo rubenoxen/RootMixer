@@ -1,4 +1,5 @@
-#include "stm32f4xx.h"
+#include "stm32f411.h"
+#include "mux.h"
 
 void MUX_Init(void) {
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;

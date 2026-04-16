@@ -1,4 +1,5 @@
 #include "stm32f411.h"
+#include "usb.h"
 
 typedef struct { uint8_t T; uint8_t R; uint16_t V; uint16_t I; uint16_t L; } __attribute__((packed)) SETUP;
 
