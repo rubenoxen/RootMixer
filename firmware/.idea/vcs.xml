@@ -2,5 +2,16 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/tinyusb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/tinyusb/hw/mcu/arm/CMSIS_5" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/tinyusb/hw/mcu/st/cmsis_device_f4" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/tinyusb/hw/mcu/st/stm32f4xx_hal_driver" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/tinyusb/lib/CMSIS_5" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/tinyusb/lib/FreeRTOS-Kernel" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/tinyusb/lib/fatfs" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/tinyusb/lib/lwip" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/tinyusb/lib/threadx" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/tinyusb/tools/linkermap" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/tinyusb/tools/uf2" vcs="Git" />
   </component>
 </project>
