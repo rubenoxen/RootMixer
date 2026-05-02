@@ -58,6 +58,6 @@ clean:
 
 #ST-Link Flash
 flash: $(TARGET).elf
-	openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c "program $< verify reset exit"
+	openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c "reset_config connect_assert_srst" -c "program $< verify reset exit"
 
 .PHONY: all clean flash size
