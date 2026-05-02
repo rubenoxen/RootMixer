@@ -31,6 +31,10 @@ void Process_Analog_To_MIDI(uint16_t raw_adc, uint8_t *current_midi, uint8_t cc_
 }
 
 int main(void) {
+    RCC_AHB1ENR |= (1 << 2); // Dar energía al puerto C
+    GPIOC_MODER = (GPIOC_MODER & ~(3 << 26)) | (1 << 26); // PC13 como salida
+    GPIOC_BSRR = (1 << 29); // Poner PC13 a GND (Enciende LED Azul WeAct)
+
     // 1. Inicialización de Relojes y Temporizadores
     SystemClock_Config();
     SysTick_Init();
@@ -42,8 +46,8 @@ int main(void) {
     Buttons_Init();
 
     // 3. Inicialización de Comunicaciones y UI
-    I2C_Init();
-    SSD1306_Init();
+    //I2C_Init();
+    //SSD1306_Init();
 
     // 4. Inicialización del Stack USB (Puro Bare Metal)
     USB_GPIO_Init();
@@ -59,6 +63,10 @@ int main(void) {
     SSD1306_Clear();
     // Aquí puedes dibujar tu logo o líneas iniciales.
     SSD1306_UpdateScreen();
+
+    RCC_AHB1ENR |= (1 << 2);
+    GPIOC_MODER = (GPIOC_MODER & ~(3 << 26)) | (1 << 26);
+    GPIOC_BSRR = (1 << 29);
 
     while (1) {
         uint32_t current_time = Get_Millis();

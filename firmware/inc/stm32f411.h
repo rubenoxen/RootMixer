@@ -80,6 +80,7 @@
 /* --- USB OTG FS GLOBAL & DEVICE & ENDPOINTS --- */
 #define USB_GAHBCFG     *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x008))
 #define USB_GUSBCFG     *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x00C))
+#define USB_GCCFG       *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x038))
 #define USB_GRSTCTL     *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x010))
 #define USB_GINTSTS     *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x014))
 #define USB_GINTMSK     *((volatile uint32_t *)(USB_OTG_FS_BASE + 0x018))
